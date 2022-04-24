@@ -16,7 +16,8 @@ public class InputTest {
 
         Madlibsalgo mla = new Madlibsalgo(text);
         String fin = mla.createMadLibs();
-        System.out.println("f:" + fin);
+        System.out.println(fin);
+        System.out.println(mla.returnTagMap().toString());
 
     }
 }

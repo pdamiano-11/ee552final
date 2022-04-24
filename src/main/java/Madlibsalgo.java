@@ -1,22 +1,30 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import opennlp.tools.postag.*;
 import opennlp.tools.tokenize.*;
 import java.io.*;
 
 public class Madlibsalgo {
     private List<String> text = new ArrayList<>();
-    private List<String> types = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
+    private Map<String, Integer> tagMap = new HashMap<>();
     
 
     public Madlibsalgo(List<String> text) {
         this.text = preprocess(text);
-        types.add("NOUN");
-        types.add("PROPN");
-        types.add("ADJ");
-        types.add("VERB");
-        types.add("DET");
+
+        tags.add("NOUN");
+        tags.add("PROPN");
+        tags.add("ADJ");
+        tags.add("VERB");
+        tags.add("DET");
+
+        for (String tag : tags) {
+            tagMap.put(tag, 0);
+        }
     }
 
     private List<String> preprocess(List<String> text) {
@@ -39,20 +47,27 @@ public class Madlibsalgo {
             POSTaggerME pos = new POSTaggerME(posModel);
 
             
+            
             for (String row : text) {
                 String[] rowTokens = tkn.tokenize(row);
                 String[] rowTags = pos.tag(rowTokens);
                 
-                String initialType = types.get(0);
-                int wordIndex = findWord(rowTags);
-                while (wordIndex == -1 && initialType != types.get(0)) {
-                    wordIndex = findWord(rowTags);
+                String initialTag = tags.get(0);
+                int wordIndex = findWordIndex(rowTags);
+                while (wordIndex == -1 && initialTag != tags.get(0)) {
+                    wordIndex = findWordIndex(rowTags);
                 }
                 if (wordIndex != -1) {
                     rowTokens[wordIndex] = "________(" + rowTags[wordIndex] + ")";
+                    String removedTag = tags.get(tags.size() - 1);
+                    int count = tagMap.get(removedTag);
+                    count++;
+                    tagMap.put(removedTag, count);
                 }
                 text.set(text.indexOf(row), String.join(" ", rowTokens));
             }
+            isPos.close();
+            isToken.close();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -61,17 +76,21 @@ public class Madlibsalgo {
         return String.join(" ", text);
     }
 
-    private int findWord(String[] tags) {
-        String pos = types.get(0);
+    public Map<String, Integer> returnTagMap() {
+        return tagMap;
+    }
+
+    private int findWordIndex(String[] t) {
+        String pos = tags.get(0);
         int res = -1;
-        for (int i = 0; i < tags.length; i++) {
-            if (pos.equalsIgnoreCase(tags[i])) {
+        for (int i = 0; i < t.length; i++) {
+            if (pos.equalsIgnoreCase(t[i])) {
                 res = i;
                 break;
             }
         }
-        types.remove(0);
-        types.add(pos);
+        tags.remove(0);
+        tags.add(pos);
         return res;
     }
     public static void main(String[] args) {
