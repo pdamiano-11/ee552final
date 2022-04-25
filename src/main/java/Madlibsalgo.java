@@ -12,6 +12,21 @@ public class Madlibsalgo {
     private List<String> tags = new ArrayList<>();
     private Map<String, Integer> tagMap = new HashMap<>();
     
+    public static List<String> getMadLines() throws Exception {
+        List<String>MadLines = new ArrayList<>(); //Initialize list of madlib lines
+        File myFile = new File("test.txt"); //Initialize file
+        String line; //Initialize string to hold line
+
+        BufferedReader read = new BufferedReader(new FileReader(myFile)); //open new bufferedreader
+        
+        while((line = read.readLine()) != null) {
+            MadLines.add(line); //Add each line untill no lines left
+        }
+        
+        read.close(); //close the buffered reader
+        
+        return MadLines; //return the list of each line
+    }
 
     public Madlibsalgo(List<String> text) {
         this.text = preprocess(text);
