@@ -8,13 +8,15 @@ import opennlp.tools.tokenize.*;
 import java.io.*;
 
 public class Madlibsalgo {
-    private List<String> text = new ArrayList<>();
+    private List<String> initialText = new ArrayList<>();
+    private List<String> textWithBlanks = new ArrayList<>();
+    private List<String> textNewWords = new ArrayList<>();
     private List<String> tags = new ArrayList<>();
     private Map<String, Integer> tagMap = new HashMap<>();
     
 
     public Madlibsalgo(List<String> text) {
-        this.text = preprocess(text);
+        initialText = preprocess(text);
 
         tags.add("NOUN");
         tags.add("PROPN");
@@ -47,8 +49,7 @@ public class Madlibsalgo {
             POSTaggerME pos = new POSTaggerME(posModel);
 
             
-            
-            for (String row : text) {
+            for (String row : initialText) {
                 String[] rowTokens = tkn.tokenize(row);
                 String[] rowTags = pos.tag(rowTokens);
                 
@@ -64,7 +65,7 @@ public class Madlibsalgo {
                     count++;
                     tagMap.put(removedTag, count);
                 }
-                text.set(text.indexOf(row), String.join(" ", rowTokens));
+                textWithBlanks.add(String.join(" ", rowTokens));
             }
             isPos.close();
             isToken.close();
@@ -73,7 +74,7 @@ public class Madlibsalgo {
             e.printStackTrace();
         }
 
-        return String.join(" ", text);
+        return String.join(" ", textWithBlanks);
     }
 
     public Map<String, Integer> returnTagMap() {
@@ -92,6 +93,15 @@ public class Madlibsalgo {
         tags.remove(0);
         tags.add(pos);
         return res;
+    }
+
+    public List<String> insertWords(List<String> words) {
+
+        for (String line : textWithBlanks) {
+            break;
+        }
+
+        return textNewWords;
     }
     public static void main(String[] args) {
         
