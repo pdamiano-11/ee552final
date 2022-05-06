@@ -21,7 +21,7 @@ public class Madlibsalgo {
         tags.add("PROPN");
         tags.add("ADJ");
         tags.add("VERB");
-        tags.add("DET");
+        tags.add("ADV");
 
         for (String tag : tags) {
             tagMap.put(tag, 0);

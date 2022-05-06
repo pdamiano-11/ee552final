@@ -24,5 +24,12 @@ public class MadLibsFiles {
 
         return MadLines; //return the list of each line
     }
+
+    public static void main(String[] args) {
+        MadLibsFiles m = new MadLibsFiles();
+        List<String> lines = m.getMadLines("C:/Users/ptrda/Desktop/ee552/ee552final/src/main/java/test.txt");
+        Madlibsalgo ma = new Madlibsalgo(lines);
+        String res = ma.createMadLibs();
+    }
     
 }
