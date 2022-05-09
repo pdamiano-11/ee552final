@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class MadLibsFiles {
     public List<String> getMadLines(String filePath) {
@@ -24,12 +27,12 @@ public class MadLibsFiles {
 
         return MadLines; //return the list of each line
     }
-
-    public static void main(String[] args) {
-        MadLibsFiles m = new MadLibsFiles();
-        List<String> lines = m.getMadLines("C:/Users/ptrda/Desktop/ee552/ee552final/src/main/java/test.txt");
-        Madlibsalgo ma = new Madlibsalgo(lines);
-        String res = ma.createMadLibs();
-    }
-    
+    public static void writeToFile(String filename, ArrayList<String> contents) throws IOException{
+        // use a BufferedWriter to write the string contents to the file
+        try(BufferedWriter out = new BufferedWriter(new FileWriter(filename))){
+            for (String temp : contents) {
+                out.write(temp);
+            }
+        }
+      }
 }
