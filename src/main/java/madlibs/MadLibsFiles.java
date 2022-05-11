@@ -1,3 +1,5 @@
+package madlibs;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
@@ -11,7 +13,8 @@ public class MadLibsFiles {
     public List<String> getMadLines(String filePath) {
         List<String> MadLines = new ArrayList<>(); //Initialize list of madlib lines
         try {
-            File myFile = new File(filePath); //Initialize file
+            String path = new File("").getAbsolutePath();
+            File myFile = new File(path.concat(filePath)); //Initialize file
             String line; //Initialize string to hold line
 
             BufferedReader read = new BufferedReader(new FileReader(myFile)); //open new bufferedreader
@@ -27,7 +30,7 @@ public class MadLibsFiles {
 
         return MadLines; //return the list of each line
     }
-    public static void writeToFile(String filename, ArrayList<String> contents) throws IOException{
+    public void writeToFile(String filename, ArrayList<String> contents) throws IOException{
         // use a BufferedWriter to write the string contents to the file
         try(BufferedWriter out = new BufferedWriter(new FileWriter(filename))){
             for (String temp : contents) {
@@ -35,4 +38,8 @@ public class MadLibsFiles {
             }
         }
       }
+    
+    public static void main(String[] args) {
+        
+    }
 }

@@ -46,7 +46,12 @@
          <groupId>org.apache.opennlp</groupId> 
          <artifactId>opennlp-uima</artifactId> 
          <version>1.9.4</version> 
-      </dependency>  
+    </dependency>
+    <dependency>
+        <groupId>org.processing</groupId>
+        <artifactId>core</artifactId>
+        <version>3.3.7</version>
+    </dependency>
   </dependencies>
 
   <build>

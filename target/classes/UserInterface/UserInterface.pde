@@ -36,6 +36,11 @@ void setup() {
 
 void draw() {
   background(255);
+  
+  List<String> test = MadLibsFiles.getMadLines("/src/main/java/madlibs/test.txt");
+  for (String line : test) {
+    System.out.print(line);
+  }
  
   //----------------------------------   Start Screen Logic  ----------------------------------------
   if (startScreen){
