@@ -95,12 +95,27 @@ public class Madlibsalgo {
         return res;
     }
 
-    public List<String> insertWords(List<String> words) {
+    public List<String> insertWords(Map<String, List<String>> newWords) {
 
-        for (String line : textWithBlanks) {
-            break;
+        String newLine;
+        if (textWithBlanks.size() > 0) {
+            for (String line : textWithBlanks) {
+                int tagFront = line.indexOf("(");
+                int tagBack = line.indexOf(")");
+                String tag = line.substring(tagFront + 1, tagBack);
+                List<String> words = newWords.get(tag);
+            
+                if (words.size() > 0) {
+                    newLine = line.replace("________", words.get(0) + " ");
+                    words.remove(0);
+                } else {
+                    newLine = line;
+                }
+                newWords.put(tag, words);
+                textNewWords.add(newLine);
+            }
+            textWithBlanks = new ArrayList<>();
         }
-
         return textNewWords;
     }
     public static void main(String[] args) {

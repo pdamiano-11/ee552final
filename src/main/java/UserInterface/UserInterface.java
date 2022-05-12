@@ -30,27 +30,31 @@ public class UserInterface extends PApplet {
     boolean inputScreen1 = false;
     boolean inputScreen2 = false;
     boolean resultScreen = false;
+    boolean fillBlanks = true;
 
     // these are temporary but should be sent in from the other file
-    int numAdj = 2;
-    int numNoun = 2;
-    int numVerb = 2;
-    int numPnoun = 2;
-    int numAdV = 2;
-
-    String adj[];
-    String noun[];
-    String verb[];
-    String propn[];
-    String adv[];
 
     String input = "";
     char t = 'a';
-    Map<String, String[]> mp = new HashMap<>();
+    Map<String, List<String>> mp = new HashMap<>();
 
     List<String> lines = MadLibsFiles.getMadLines("/src/main/java/madlibs/test.txt");
     Madlibsalgo mla = new Madlibsalgo(lines);
     List<String> blankText = mla.createMadLibs();
+    Map<String, Integer> tagMap = mla.returnTagMap();
+
+    int numAdj = tagMap.get("ADJ");
+    int numNoun = tagMap.get("NOUN");
+    int numVerb = tagMap.get("VERB");
+    int numPnoun = tagMap.get("PROPN");
+    int numAdV = tagMap.get("ADV");
+
+    List<String> adj;
+    List<String> noun;
+    List<String> verb;
+    List<String> propn;
+    List<String> adv;
+    List<String> temp;
 
     @Override
 	public void settings() {
@@ -105,11 +109,17 @@ public class UserInterface extends PApplet {
             rect(17, 265, 248, numAdj * 35);
             fill(255);
             if (t == 'a') {
-                text(input, 20, 285);
-                if (keyCode == UP) {
+                if (numAdj > 0) {
+                    text(input, 20, 285);
+                    if (keyCode == UP) {
+                        t = 'n';
+                        temp = Arrays.asList(input.split("\n"));
+                        adj = new ArrayList<>(temp);
+                        mp.put("ADJ", adj);
+                        input = "";
+                    }
+                } else {
                     t = 'n';
-                    System.out.println(Arrays.toString(input.split("\n")));
-                    input = "";
                 }
             }
             if (t != 'a') {
@@ -124,11 +134,17 @@ public class UserInterface extends PApplet {
             rect(277, 265, 248, numNoun * 35);
             fill(255);
             if (t == 'n') {
-                text(input, 280, 285);
-                if (keyCode == DOWN) {
+                if (numNoun > 0) {
+                    text(input, 280, 285);
+                    if (keyCode == DOWN) {
+                        t = 'v';
+                        temp = Arrays.asList(input.split("\n"));
+                        noun = new ArrayList<>(temp);
+                        mp.put("NOUN", noun);
+                        input = "";
+                    }
+                } else {
                     t = 'v';
-                    System.out.println(Arrays.toString(input.split("\n")));
-                    input = "";
                 }
             }
             if (t != 'a' && t != 'n') {
@@ -143,11 +159,17 @@ public class UserInterface extends PApplet {
             rect(537, 265, 248, numVerb * 35);
             fill(255);
             if (t == 'v') {
-                text(input, 540, 285);
-                if (keyCode == UP) {
+                if (numVerb > 0) {
+                    text(input, 540, 285);
+                    if (keyCode == UP) {
+                        t = 'p';
+                        temp = Arrays.asList(input.split("\n"));
+                        verb = new ArrayList<>(temp);
+                        mp.put("VERB", verb);
+                        input = "";
+                    }
+                } else {
                     t = 'p';
-                    System.out.println(Arrays.toString(input.split("\n")));
-                    input = "";
                 }
             }
             if (t != 'a' && t != 'n' && t != 'v') {
@@ -179,13 +201,49 @@ public class UserInterface extends PApplet {
             fill(130, 191, 194); // light color
             stroke(130, 191, 194);
             rect(147, 265, 248, numPnoun * 35);
+            fill(255);
+            if (t == 'p') {
+                if (numPnoun > 0) {
+                    text(input, 150, 285);
+                    if (keyCode == DOWN) {
+                        t = 'd';
+                        temp = Arrays.asList(input.split("\n"));
+                        propn = new ArrayList<>(temp);
+                        mp.put("PROPN", propn);
+                        input = "";
+                    }
+                } else {
+                    t = 'd';
+                }
+            }
+            if (t != 'p') {
+                image(checkmark, 260, 290, checkmark.width/15, checkmark.height/15);
+            }
 
             image(secHea, 405, 200, secHea.width * 2 / 5, secHea.height / 2);
             fill(3, 152, 158); // dark color
             text("Enter  " + numAdV + "  Adverbs", 435, 250);
             fill(130, 191, 194); // light color
             stroke(130, 191, 194);
-            rect(407, 265, 248, numVerb * 35);
+            rect(407, 265, 248, numAdV * 35);
+            fill(255);
+            if (t == 'd') {
+                if (numAdV > 0) {
+                    text(input, 410, 285);
+                    if (keyCode == UP) {
+                        t = 'q';
+                        temp = Arrays.asList(input.split("\n"));
+                        adv = new ArrayList<>(temp);
+                        mp.put("ADV", adv);
+                        input = "";
+                    }
+                } else {
+                    t = 'q';
+                }
+            }
+            if (t != 'p' && t != 'd') {
+                image(checkmark, 520, 290, checkmark.width/15, checkmark.height/15);
+            }
 
             // result button
             image(resultButton, (width / 3), (height * 5 / 6) + 30, resultButton.width / 3,
@@ -209,13 +267,16 @@ public class UserInterface extends PApplet {
             image(logo, 0, 0, logo.width * 3 / 8, logo.height * 3 / 8);
             image(resetButt, width - 100, 60, resetButt.width / 2, resetButt.height / 2);
             image(openFile, width - 300, 65, openFile.width / 2, openFile.height / 2);
-            //rect(40, 200, 700, 350); // This is the area to display the text from the filled in story
+
+            List<String> finalText = mla.insertWords(mp);
             int tempY = 205;
-            textSize(15);
-            for (String line : blankText) {
-                text(line, 45, tempY);
+            textSize(12);
+            fill(0);
+            for (String line : finalText) {
+                text(line, 15, tempY);
                 tempY = tempY + 20;
             }
+            tempY = 205;
 
             // reset button pressed
             if ((mousePressed) && ((mouseX < ((width - 100)) + resetButt.width / 2) && (mouseX > (width - 100)))) { // checking if mouse is pressed and if x is in button range
@@ -255,6 +316,8 @@ public class UserInterface extends PApplet {
             input += key;
         }
     }
+
+
 
     public static void main(String[] args) {
         PApplet.main(UserInterface.class.getName());
