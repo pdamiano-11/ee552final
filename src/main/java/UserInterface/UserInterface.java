@@ -17,6 +17,7 @@ public class UserInterface extends PApplet {
     // Image Imports
     PImage logo;
     PImage genButton;
+    PImage begin;
     PImage secHea;
     PImage nextButt;
     PImage resultButton;
@@ -73,6 +74,7 @@ public class UserInterface extends PApplet {
         resetButt = loadImage(folderPath.concat("reset.png"));
         openFile = loadImage(folderPath.concat("open.png"));
         checkmark = loadImage(folderPath.concat("checkmark.jpg"));
+        begin = loadImage(folderPath.concat("begin.png"));
     }
 
     @Override
@@ -89,9 +91,36 @@ public class UserInterface extends PApplet {
                     && ((mouseX < ((width / 5) + 25) + genButton.width / 2) && (mouseX > (width / 5) + 25))) {// checking if mouse is pressed and if x is in button range
                 if ((mouseY < ((height * 2 / 3) + genButton.height / 2)) && (mouseY > (height * 2 / 3))) { // checking if mouse y is in button range
                     startScreen = false;
-                    inputScreen1 = true;
+                    displayScreen = true;
                 }
             }
+        }
+
+        if(displayScreen) {
+            image(logo, 0, 0, logo.width * 3 / 8, logo.height * 3 / 8);
+            textSize(30);
+            fill(0);
+            text("Your Mad Libs Text:", 400, 100);
+
+            int tmpY = 200;
+            textSize(12);
+            fill(0);
+            for (String line : blankText) {
+                text(line, 15, tmpY);
+                tmpY = tmpY + 20;
+            }
+            tmpY = 205;
+            image(begin, 20, 450, begin.width/3, begin.height/3);
+
+            if ((mousePressed) && ((mouseX < 340) && (mouseX > 20))) { // checking if mouse is pressed and if x is in button range
+                if ((mouseY < 690) && (mouseY > 450)) { // checking if mouse y is in button range
+                    if (displayScreen) {
+                        inputScreen1 = true;
+                        displayScreen = false;
+                    }
+                }
+            }
+            
         }
 
         // ---------------------------------- Input Screen 1 Logic----------------------------------------
@@ -177,10 +206,10 @@ public class UserInterface extends PApplet {
             }
 
             // next button
-            image(nextButt, (width / 3) + 40 , (height * 5/6) , nextButt.width / 4, nextButt.height / 4);
+            image(nextButt, (width / 3) + 300 , (height * 5/6) , nextButt.width / 4, nextButt.height / 4);
 
             // next button was pressed
-            if ((mousePressed) && ((mouseX < ((width / 3) + 40) + nextButt.width / 3) && (mouseX > (width / 3) + 40))) { // checking if mouse is pressed and if x is in button range
+            if ((mousePressed) && ((mouseX < ((width / 3) + 300) + nextButt.width / 3) && (mouseX > (width / 3) + 300))) { // checking if mouse is pressed and if x is in button range
                 if ((mouseY < ((height * 5 / 6) + nextButt.height / 3)) && (mouseY > ((height * 5 / 6)))) { // checking if mouse y is in button range
                     if (inputScreen1) {
                         inputScreen2 = true;
@@ -295,10 +324,16 @@ public class UserInterface extends PApplet {
                 if ((mouseY < ((65) + openFile.height / 2)) && (mouseY > ((65)))) { // checking if mouse y is in button range
                     if (resultScreen) {
                         // INSERT LOGIC TO OPEN THE NEW FILE
+                        try {
+                            MadLibsFiles.writeToFile("results.txt", finalText);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                         // temp just to show the button working
                         text("File Opened", width / 2, height / 2);
                         fill(0, 0, 0);
+
                     }
                 }
             }

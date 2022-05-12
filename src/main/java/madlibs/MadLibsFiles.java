@@ -30,11 +30,13 @@ public class MadLibsFiles {
 
         return MadLines; //return the list of each line
     }
-    public static void writeToFile(String filename, ArrayList<String> contents) throws IOException{
+    public static void writeToFile(String filename, List<String> contents) throws IOException{
         // use a BufferedWriter to write the string contents to the file
-        try(BufferedWriter out = new BufferedWriter(new FileWriter(filename))){
-            for (String temp : contents) {
-                out.write(temp);
+        String folder = new File("").getAbsolutePath();
+        String filepath = folder.concat("/src/main/java/madlibs/" + filename);
+        try(BufferedWriter out = new BufferedWriter(new FileWriter(filepath))){
+            for (String line : contents) {
+                out.write(line + "\n");
             }
         }
       }
