@@ -10,7 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class MadLibsFiles {
-    public List<String> getMadLines(String filePath) {
+    public static List<String> getMadLines(String filePath) {
         List<String> MadLines = new ArrayList<>(); //Initialize list of madlib lines
         try {
             String path = new File("").getAbsolutePath();
@@ -30,7 +30,7 @@ public class MadLibsFiles {
 
         return MadLines; //return the list of each line
     }
-    public void writeToFile(String filename, ArrayList<String> contents) throws IOException{
+    public static void writeToFile(String filename, ArrayList<String> contents) throws IOException{
         // use a BufferedWriter to write the string contents to the file
         try(BufferedWriter out = new BufferedWriter(new FileWriter(filename))){
             for (String temp : contents) {

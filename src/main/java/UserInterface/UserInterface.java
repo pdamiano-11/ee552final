@@ -2,6 +2,9 @@ package UserInterface;
 
 import processing.core.*;
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import madlibs.*;
 
 public class UserInterface extends PApplet {
     // This is the UI File for our Java Final Project
@@ -51,8 +54,11 @@ public class UserInterface extends PApplet {
     public void draw() {
         background(255);
 
-        // ---------------------------------- Start Screen Logic
-        // ----------------------------------------
+        List<String> lines = MadLibsFiles.getMadLines("/src/main/java/madlibs/test.txt");
+        Madlibsalgo mla = new Madlibsalgo(lines);
+        List<String> blankText = mla.createMadLibs();
+
+        // ---------------------------------- Start Screen Logic----------------------------------------
         if (startScreen) {
             image(logo, width / 5, height / 5, logo.width / 2, logo.height / 2);
             image(genButton, (width / 5) + 25, height * 2/3, genButton.width / 2, genButton.height / 2);
@@ -150,7 +156,13 @@ public class UserInterface extends PApplet {
             image(logo, 0, 0, logo.width * 3 / 8, logo.height * 3 / 8);
             image(resetButt, width - 100, 60, resetButt.width / 2, resetButt.height / 2);
             image(openFile, width - 300, 65, openFile.width / 2, openFile.height / 2);
-            rect(40, 200, 700, 350); // This is the area to display the text from the filled in story
+            //rect(40, 200, 700, 350); // This is the area to display the text from the filled in story
+            int tempY = 205;
+            textSize(15);
+            for (String line : blankText) {
+                text(line, 45, tempY);
+                tempY = tempY + 20;
+            }
 
             // reset button pressed
             if ((mousePressed) && ((mouseX < ((width - 100)) + resetButt.width / 2) && (mouseX > (width - 100)))) { // checking if mouse is pressed and if x is in button range

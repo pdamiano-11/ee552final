@@ -38,7 +38,7 @@ public class Madlibsalgo {
         return text;
     }
 
-    public String createMadLibs() {
+    public List<String> createMadLibs() {
 
         try {
             InputStream isToken = new FileInputStream("C:/Users/ptrda/opennlp_models/opennlp-en-ud-ewt-tokens-1.0-1.9.3.bin");
@@ -74,7 +74,7 @@ public class Madlibsalgo {
             e.printStackTrace();
         }
 
-        return String.join(" ", textWithBlanks);
+        return textWithBlanks;
     }
 
     public Map<String, Integer> returnTagMap() {
