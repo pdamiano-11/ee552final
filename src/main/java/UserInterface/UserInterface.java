@@ -4,7 +4,11 @@ import processing.core.*;
 import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import madlibs.*;
+import java.util.Map;
+import java.util.HashMap;
 
 public class UserInterface extends PApplet {
     // This is the UI File for our Java Final Project
@@ -18,9 +22,11 @@ public class UserInterface extends PApplet {
     PImage resultButton;
     PImage resetButt;
     PImage openFile;
+    PImage checkmark;
 
     // Screen Flags
     boolean startScreen = true;
+    boolean displayScreen = false;
     boolean inputScreen1 = false;
     boolean inputScreen2 = false;
     boolean resultScreen = false;
@@ -31,6 +37,20 @@ public class UserInterface extends PApplet {
     int numVerb = 2;
     int numPnoun = 2;
     int numAdV = 2;
+
+    String adj[];
+    String noun[];
+    String verb[];
+    String propn[];
+    String adv[];
+
+    String input = "";
+    char t = 'a';
+    Map<String, String[]> mp = new HashMap<>();
+
+    List<String> lines = MadLibsFiles.getMadLines("/src/main/java/madlibs/test.txt");
+    Madlibsalgo mla = new Madlibsalgo(lines);
+    List<String> blankText = mla.createMadLibs();
 
     @Override
 	public void settings() {
@@ -48,15 +68,12 @@ public class UserInterface extends PApplet {
         resultButton = loadImage(folderPath.concat("resultButton.png"));
         resetButt = loadImage(folderPath.concat("reset.png"));
         openFile = loadImage(folderPath.concat("open.png"));
+        checkmark = loadImage(folderPath.concat("checkmark.jpg"));
     }
 
     @Override
     public void draw() {
         background(255);
-
-        List<String> lines = MadLibsFiles.getMadLines("/src/main/java/madlibs/test.txt");
-        Madlibsalgo mla = new Madlibsalgo(lines);
-        List<String> blankText = mla.createMadLibs();
 
         // ---------------------------------- Start Screen Logic----------------------------------------
         if (startScreen) {
@@ -86,6 +103,18 @@ public class UserInterface extends PApplet {
             fill(130, 191, 194); // light color
             stroke(130, 191, 194);
             rect(17, 265, 248, numAdj * 35);
+            fill(255);
+            if (t == 'a') {
+                text(input, 20, 285);
+                if (keyCode == UP) {
+                    t = 'n';
+                    System.out.println(Arrays.toString(input.split("\n")));
+                    input = "";
+                }
+            }
+            if (t != 'a') {
+                image(checkmark, 130, 290, checkmark.width/15, checkmark.height/15);
+            }
 
             image(secHea, 275, 200, secHea.width * 2 / 5, secHea.height / 2);
             fill(3, 152, 158); // dark color
@@ -93,6 +122,18 @@ public class UserInterface extends PApplet {
             fill(130, 191, 194); // light color
             stroke(130, 191, 194);
             rect(277, 265, 248, numNoun * 35);
+            fill(255);
+            if (t == 'n') {
+                text(input, 280, 285);
+                if (keyCode == DOWN) {
+                    t = 'v';
+                    System.out.println(Arrays.toString(input.split("\n")));
+                    input = "";
+                }
+            }
+            if (t != 'a' && t != 'n') {
+                image(checkmark, 390, 290, checkmark.width/15, checkmark.height/15);
+            }
 
             image(secHea, 535, 200, secHea.width * 2 / 5, secHea.height / 2);
             fill(3, 152, 158); // dark color
@@ -100,6 +141,18 @@ public class UserInterface extends PApplet {
             fill(130, 191, 194); // light color
             stroke(130, 191, 194);
             rect(537, 265, 248, numVerb * 35);
+            fill(255);
+            if (t == 'v') {
+                text(input, 540, 285);
+                if (keyCode == UP) {
+                    t = 'p';
+                    System.out.println(Arrays.toString(input.split("\n")));
+                    input = "";
+                }
+            }
+            if (t != 'a' && t != 'n' && t != 'v') {
+                image(checkmark, 650, 290, checkmark.width/15, checkmark.height/15);
+            }
 
             // next button
             image(nextButt, (width / 3) + 40 , (height * 5/6) , nextButt.width / 4, nextButt.height / 4);
@@ -190,6 +243,17 @@ public class UserInterface extends PApplet {
             }
         }
 
+    }
+
+    @Override
+    public void keyTyped() {
+        if (key == BACKSPACE) {
+            if (input.length() != 0) {
+                input = input.substring(0, input.length() - 1);
+            }
+        } else {
+            input += key;
+        }
     }
 
     public static void main(String[] args) {
