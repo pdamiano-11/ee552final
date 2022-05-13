@@ -217,6 +217,7 @@ public class UserInterface extends PApplet {
                         inputScreen2 = true;
                         inputScreen1 = false;
                         t = 'p';
+                        keyCode = 0;
                     }
                 }
             }
