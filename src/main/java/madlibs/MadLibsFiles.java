@@ -38,6 +38,7 @@ public class MadLibsFiles {
             for (String line : contents) {
                 out.write(line + "\n");
             }
+            out.close();
         }
       }
     

@@ -137,7 +137,7 @@ public class UserInterface extends PApplet {
             stroke(130, 191, 194);
             rect(17, 265, 248, numAdj * 35);
             fill(255);
-            if (t == 'a') {
+            if (t == 'a' && inputScreen1) {
                 if (numAdj > 0) {
                     text(input, 20, 285);
                     if (keyCode == UP) {
@@ -151,7 +151,7 @@ public class UserInterface extends PApplet {
                     t = 'n';
                 }
             }
-            if (t != 'a') {
+            if (t != 'a' && inputScreen1) {
                 image(checkmark, 130, 290, checkmark.width/15, checkmark.height/15);
             }
 
@@ -162,7 +162,7 @@ public class UserInterface extends PApplet {
             stroke(130, 191, 194);
             rect(277, 265, 248, numNoun * 35);
             fill(255);
-            if (t == 'n') {
+            if (t == 'n' && inputScreen1) {
                 if (numNoun > 0) {
                     text(input, 280, 285);
                     if (keyCode == DOWN) {
@@ -176,7 +176,7 @@ public class UserInterface extends PApplet {
                     t = 'v';
                 }
             }
-            if (t != 'a' && t != 'n') {
+            if (t != 'a' && t != 'n' && inputScreen1) {
                 image(checkmark, 390, 290, checkmark.width/15, checkmark.height/15);
             }
 
@@ -187,7 +187,7 @@ public class UserInterface extends PApplet {
             stroke(130, 191, 194);
             rect(537, 265, 248, numVerb * 35);
             fill(255);
-            if (t == 'v') {
+            if (t == 'v' && inputScreen1) {
                 if (numVerb > 0) {
                     text(input, 540, 285);
                     if (keyCode == UP) {
@@ -201,7 +201,7 @@ public class UserInterface extends PApplet {
                     t = 'p';
                 }
             }
-            if (t != 'a' && t != 'n' && t != 'v') {
+            if (t != 'a' && t != 'n' && t != 'v' && inputScreen1) {
                 image(checkmark, 650, 290, checkmark.width/15, checkmark.height/15);
             }
 
@@ -231,7 +231,7 @@ public class UserInterface extends PApplet {
             stroke(130, 191, 194);
             rect(147, 265, 248, numPnoun * 35);
             fill(255);
-            if (t == 'p') {
+            if (t == 'p' && inputScreen2) {
                 if (numPnoun > 0) {
                     text(input, 150, 285);
                     if (keyCode == DOWN) {
@@ -245,7 +245,7 @@ public class UserInterface extends PApplet {
                     t = 'd';
                 }
             }
-            if (t != 'p') {
+            if (t != 'p' && inputScreen2) {
                 image(checkmark, 260, 290, checkmark.width/15, checkmark.height/15);
             }
 
@@ -256,7 +256,7 @@ public class UserInterface extends PApplet {
             stroke(130, 191, 194);
             rect(407, 265, 248, numAdV * 35);
             fill(255);
-            if (t == 'd') {
+            if (t == 'd' && inputScreen2) {
                 if (numAdV > 0) {
                     text(input, 410, 285);
                     if (keyCode == UP) {
@@ -267,10 +267,10 @@ public class UserInterface extends PApplet {
                         input = "";
                     }
                 } else {
-                    t = 'q';
+                    t = 'a';
                 }
             }
-            if (t != 'p' && t != 'd') {
+            if (t != 'p' && t != 'd' && inputScreen2) {
                 image(checkmark, 520, 290, checkmark.width/15, checkmark.height/15);
             }
 
@@ -311,6 +311,9 @@ public class UserInterface extends PApplet {
             if ((mousePressed) && ((mouseX < ((width - 100)) + resetButt.width / 2) && (mouseX > (width - 100)))) { // checking if mouse is pressed and if x is in button range
                 if ((mouseY < ((60) + resetButt.height / 2)) && (mouseY > ((60)))) { // checking if mouse y is in button range
                     if (resultScreen) {
+                        mla.textNewWords = new ArrayList<>();
+                        t = 'a';
+                        keyCode = 0;
                         startScreen = true;
                         resultScreen = false;
 

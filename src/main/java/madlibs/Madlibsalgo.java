@@ -11,7 +11,7 @@ import java.io.*;
 public class Madlibsalgo {
     private List<String> initialText = new ArrayList<>();
     private List<String> textWithBlanks = new ArrayList<>();
-    private List<String> textNewWords = new ArrayList<>();
+    public List<String> textNewWords = new ArrayList<>();
     private List<String> tags = new ArrayList<>();
     private Map<String, Integer> tagMap = new HashMap<>();
 
@@ -41,10 +41,11 @@ public class Madlibsalgo {
     public List<String> createMadLibs() {
 
         try {
-            InputStream isToken = new FileInputStream("C:/Users/ptrda/opennlp_models/opennlp-en-ud-ewt-tokens-1.0-1.9.3.bin");
+            String folder = new File("").getAbsolutePath();
+            InputStream isToken = new FileInputStream(folder.concat("/opennlp_models/opennlp-en-ud-ewt-tokens-1.0-1.9.3.bin"));
             TokenizerModel tokenModel = new TokenizerModel(isToken);
             Tokenizer tkn = new TokenizerME(tokenModel);
-            InputStream isPos = new FileInputStream("C:/Users/ptrda/opennlp_models/opennlp-en-ud-ewt-pos-1.0-1.9.3.bin");
+            InputStream isPos = new FileInputStream(folder.concat("/opennlp_models/opennlp-en-ud-ewt-pos-1.0-1.9.3.bin"));
             POSModel posModel = new POSModel(isPos);
             POSTaggerME pos = new POSTaggerME(posModel);
 
@@ -98,23 +99,22 @@ public class Madlibsalgo {
     public List<String> insertWords(Map<String, List<String>> newWords) {
 
         String newLine;
-        if (textWithBlanks.size() > 0) {
+        if (textNewWords.size() == 0) {
             for (String line : textWithBlanks) {
                 int tagFront = line.indexOf("(");
                 int tagBack = line.indexOf(")");
                 String tag = line.substring(tagFront + 1, tagBack);
                 List<String> words = newWords.get(tag);
             
-                if (words.size() > 0) {
+                if (words == null || words.size() <= 0) {
+                    newLine = line;
+                } else {
                     newLine = line.replace("________", words.get(0) + " ");
                     words.remove(0);
-                } else {
-                    newLine = line;
                 }
                 newWords.put(tag, words);
                 textNewWords.add(newLine);
             }
-            textWithBlanks = new ArrayList<>();
         }
         return textNewWords;
     }
