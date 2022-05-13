@@ -33,23 +33,26 @@ public class UserInterface extends PApplet {
     boolean resultScreen = false;
     boolean fillBlanks = true;
 
-    // these are temporary but should be sent in from the other file
+    // User input variables
+    String input = ""; // text input that user sees on screen
+    String[] inptWords; // words saved from input
+    char t = 'a'; // type of input to get: a for ADJ, n for NOUN, v for VERB, p for PROPN, d for ADV
+    Map<String, List<String>> mp = new HashMap<>(); // main user input map for tags to inputted words
 
-    String input = "";
-    char t = 'a';
-    Map<String, List<String>> mp = new HashMap<>();
-
+    // Getting text from file and creating madlibs object from it
     List<String> lines = MadLibsFiles.getMadLines("/main.txt");
     Madlibsalgo mla = new Madlibsalgo(lines);
     List<String> blankText = mla.createMadLibs();
     Map<String, Integer> tagMap = mla.returnTagMap();
 
+    // getting number of each POS from algorithm tag map
     int numAdj = tagMap.get("ADJ");
     int numNoun = tagMap.get("NOUN");
     int numVerb = tagMap.get("VERB");
     int numPnoun = tagMap.get("PROPN");
     int numAdV = tagMap.get("ADV");
 
+    // all lists for user input words to put in for user input map, as well as temporary list
     List<String> adj;
     List<String> noun;
     List<String> verb;
@@ -63,7 +66,7 @@ public class UserInterface extends PApplet {
 	}
 
     @Override
-    public void setup() {
+    public void setup() { // loading in all images
         String absPath = new File("").getAbsolutePath();
         String folderPath = absPath.concat("/src/main/java/UserInterface/");
         logo = loadImage(folderPath.concat("logo.png"));
@@ -97,8 +100,8 @@ public class UserInterface extends PApplet {
                 }
             }
         }
-
-        if(displayScreen) {
+        // ---------------------------------- Display Screen Logic----------------------------------------   
+        if(displayScreen) { // display text with blanks
             image(logo, 0, 0, logo.width * 3 / 8, logo.height * 3 / 8);
             textSize(30);
             fill(0);
@@ -139,20 +142,30 @@ public class UserInterface extends PApplet {
             stroke(130, 191, 194);
             rect(17, 265, 248, numAdj * 35);
             fill(255);
-            if (t == 'a' && inputScreen1) {
-                if (numAdj > 0) {
-                    text(input, 20, 285);
-                    if (keyCode == UP) {
-                        t = 'n';
-                        temp = Arrays.asList(input.split("\n"));
-                        adj = new ArrayList<>(temp);
-                        mp.put("ADJ", adj);
-                        input = "";
+            // These next few conditionals are for user input, and apply to all 5 POS inputs below
+            if (t == 'a' && inputScreen1) { // checking if adjective and on first input screen
+                if (numAdj > 0) { // checking if we can get any adjectives from user
+                    text(input, 20, 285); // allowing user to enter text
+                    if (keyCode == UP) { // submission
+                        inptWords = input.split("\n"); // get words in a list
+                        if (mla.checkPOS(inptWords, "ADJ")) { // check each word POS
+                            t = 'n'; // switch to NOUN
+                            temp = Arrays.asList(inptWords);
+                            adj = new ArrayList<>(temp);
+                            mp.put("ADJ", adj); // save to user input map
+                            input = "";
+                        }
+                        else { // if incorrect POS, begin again and clear input
+                            t = 'a';
+                            input = "";
+                        }
                     }
-                } else {
+                } else { // if no adjectives to get, go to NOUN
                     t = 'n';
                 }
             }
+            // These image methods act as submission checkers to know that the input is submitted,
+            // and they apply to all POS input boxes
             if (t != 'a' && inputScreen1) {
                 image(checkmark, 130, 290, checkmark.width/15, checkmark.height/15);
             }
@@ -164,15 +177,22 @@ public class UserInterface extends PApplet {
             stroke(130, 191, 194);
             rect(277, 265, 248, numNoun * 35);
             fill(255);
-            if (t == 'n' && inputScreen1) {
+            if (t == 'n' && inputScreen1) { // same as adjectives but for nouns
                 if (numNoun > 0) {
                     text(input, 280, 285);
                     if (keyCode == DOWN) {
-                        t = 'v';
-                        temp = Arrays.asList(input.split("\n"));
-                        noun = new ArrayList<>(temp);
-                        mp.put("NOUN", noun);
-                        input = "";
+                        inptWords = input.split("\n");
+                        if (mla.checkPOS(inptWords, "NOUN")) {
+                            t = 'v';
+                            temp = Arrays.asList(inptWords);
+                            noun = new ArrayList<>(temp);
+                            mp.put("NOUN", noun);
+                            input = "";
+                        }
+                        else {
+                            t = 'n';
+                            input = "";
+                        }
                     }
                 } else {
                     t = 'v';
@@ -193,11 +213,18 @@ public class UserInterface extends PApplet {
                 if (numVerb > 0) {
                     text(input, 540, 285);
                     if (keyCode == UP) {
-                        t = 'p';
-                        temp = Arrays.asList(input.split("\n"));
-                        verb = new ArrayList<>(temp);
-                        mp.put("VERB", verb);
-                        input = "";
+                        inptWords = input.split("\n");
+                        if (mla.checkPOS(inptWords, "VERB")) {
+                            t = 'p';
+                            temp = Arrays.asList(inptWords);
+                            verb = new ArrayList<>(temp);
+                            mp.put("VERB", verb);
+                            input = "";
+                        }
+                        else {
+                            t = 'v';
+                            input = "";
+                        }
                     }
                 } else {
                     t = 'p';
@@ -239,11 +266,18 @@ public class UserInterface extends PApplet {
                 if (numPnoun > 0) {
                     text(input, 150, 285);
                     if (keyCode == DOWN) {
-                        t = 'd';
-                        temp = Arrays.asList(input.split("\n"));
-                        propn = new ArrayList<>(temp);
-                        mp.put("PROPN", propn);
-                        input = "";
+                        inptWords = input.split("\n");
+                        if (mla.checkPOS(inptWords, "PROPN")) {
+                            t = 'd';
+                            temp = Arrays.asList(inptWords);
+                            propn = new ArrayList<>(temp);
+                            mp.put("PROPN", propn);
+                            input = "";
+                        }
+                        else {
+                            t = 'p';
+                            input = "";
+                        }
                     }
                 } else {
                     t = 'd';
@@ -264,11 +298,18 @@ public class UserInterface extends PApplet {
                 if (numAdV > 0) {
                     text(input, 410, 285);
                     if (keyCode == UP) {
-                        t = 'q';
-                        temp = Arrays.asList(input.split("\n"));
-                        adv = new ArrayList<>(temp);
-                        mp.put("ADV", adv);
-                        input = "";
+                        inptWords = input.split("\n");
+                        if (mla.checkPOS(inptWords, "ADV")) {
+                            t = 'a';
+                            temp = Arrays.asList(inptWords);
+                            adv = new ArrayList<>(temp);
+                            mp.put("ADV", adv);
+                            input = "";
+                        }
+                        else {
+                            t = 'd';
+                            input = "";
+                        }
                     }
                 } else {
                     t = 'a';
@@ -301,11 +342,11 @@ public class UserInterface extends PApplet {
             image(resetButt, width - 100, 60, resetButt.width / 2, resetButt.height / 2);
             image(openFile, width - 300, 65, openFile.width / 2, openFile.height / 2);
 
-            List<String> finalText = mla.insertWords(mp);
+            List<String> finalText = mla.insertWords(mp); // getting user inputted words inserted into text with blanks
             int tempY = 205;
             textSize(12);
             fill(0);
-            for (String line : finalText) {
+            for (String line : finalText) { // printing out the result text
                 text(line, 15, tempY);
                 tempY = tempY + 20;
             }
@@ -315,13 +356,12 @@ public class UserInterface extends PApplet {
             if ((mousePressed) && ((mouseX < ((width - 100)) + resetButt.width / 2) && (mouseX > (width - 100)))) { // checking if mouse is pressed and if x is in button range
                 if ((mouseY < ((60) + resetButt.height / 2)) && (mouseY > ((60)))) { // checking if mouse y is in button range
                     if (resultScreen) {
-                        mla.textNewWords = new ArrayList<>();
-                        t = 'a';
-                        keyCode = 0;
+                        mla.textNewWords = new ArrayList<>(); // emptying final results
+                        t = 'a'; // resetting type to adj
+                        keyCode = 0; // resetting keyboard input
                         startScreen = true;
                         resultScreen = false;
 
-                        // INSERT ANY OTHER RESET LOGIC
                     }
                 }
             }
@@ -330,9 +370,8 @@ public class UserInterface extends PApplet {
             if ((mousePressed) && ((mouseX < ((width - 300)) + openFile.width / 2) && (mouseX > (width - 300)))) { // checking if mouse is pressed and if x is in button range
                 if ((mouseY < ((65) + openFile.height / 2)) && (mouseY > ((65)))) { // checking if mouse y is in button range
                     if (resultScreen) {
-                        // INSERT LOGIC TO OPEN THE NEW FILE
                         try {
-                            MadLibsFiles.writeToFile("results.txt", finalText);
+                            MadLibsFiles.writeToFile("results.txt", finalText); // writing final results to file
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -349,19 +388,19 @@ public class UserInterface extends PApplet {
     }
 
     @Override
-    public void keyTyped() {
+    public void keyTyped() { // check which key typed and perform action
         if (key == BACKSPACE) {
             if (input.length() != 0) {
                 input = input.substring(0, input.length() - 1);
             }
         } else {
-            input += key;
+            input += key; // driver code behind user seeing text appear on screen
         }
     }
 
 
 
     public static void main(String[] args) {
-        PApplet.main(UserInterface.class.getName());
+        PApplet.main(UserInterface.class.getName()); // running processing core in java
     }
 }
