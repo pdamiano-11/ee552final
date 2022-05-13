@@ -39,7 +39,7 @@ public class UserInterface extends PApplet {
     char t = 'a';
     Map<String, List<String>> mp = new HashMap<>();
 
-    List<String> lines = MadLibsFiles.getMadLines("/src/main/java/madlibs/test.txt");
+    List<String> lines = MadLibsFiles.getMadLines("/src/main/java/madlibs/main.txt");
     Madlibsalgo mla = new Madlibsalgo(lines);
     List<String> blankText = mla.createMadLibs();
     Map<String, Integer> tagMap = mla.returnTagMap();
@@ -83,15 +83,17 @@ public class UserInterface extends PApplet {
 
         // ---------------------------------- Start Screen Logic----------------------------------------
         if (startScreen) {
-            image(logo, width / 5, height / 5, logo.width / 2, logo.height / 2);
-            image(genButton, (width / 5) + 25, height * 2/3, genButton.width / 2, genButton.height / 2);
+            image(logo, width / 4, height / 4, logo.width / 2, logo.height / 2);
+            image(genButton, (width / 5) + 25, height * 2/3 + 25, genButton.width / 2, genButton.height / 2);
+            
 
             // generate button was| pressed
             if ((mousePressed)
                     && ((mouseX < ((width / 5) + 25) + genButton.width / 2) && (mouseX > (width / 5) + 25))) {// checking if mouse is pressed and if x is in button range
-                if ((mouseY < ((height * 2 / 3) + genButton.height / 2)) && (mouseY > (height * 2 / 3))) { // checking if mouse y is in button range
+                if ((mouseY < ((height * 2 / 3) + 25 + genButton.height / 2)) && (mouseY > (height * 2 / 3) + 25)) { // checking if mouse y is in button range
                     startScreen = false;
                     displayScreen = true;
+
                 }
             }
         }
@@ -132,7 +134,7 @@ public class UserInterface extends PApplet {
 
             image(secHea, 15, 200, secHea.width * 2 / 5, secHea.height / 2);
             fill(3, 152, 158); // dark color
-            text("Enter  " + numAdj + "  Adjectives", 55, 250);
+            text("Enter  " + numAdj + "  Adjectives (UP)", 25, 250);
             fill(130, 191, 194); // light color
             stroke(130, 191, 194);
             rect(17, 265, 248, numAdj * 35);
@@ -157,7 +159,7 @@ public class UserInterface extends PApplet {
 
             image(secHea, 275, 200, secHea.width * 2 / 5, secHea.height / 2);
             fill(3, 152, 158); // dark color
-            text("Enter  " + numNoun + "  Nouns", 315, 250);
+            text("Enter  " + numNoun + "  Nouns (DOWN)", 285, 250);
             fill(130, 191, 194); // light color
             stroke(130, 191, 194);
             rect(277, 265, 248, numNoun * 35);
@@ -182,7 +184,7 @@ public class UserInterface extends PApplet {
 
             image(secHea, 535, 200, secHea.width * 2 / 5, secHea.height / 2);
             fill(3, 152, 158); // dark color
-            text("Enter  " + numVerb + "  Verbs", 575, 250);
+            text("Enter  " + numVerb + "  Verbs (UP)", 545, 250);
             fill(130, 191, 194); // light color
             stroke(130, 191, 194);
             rect(537, 265, 248, numVerb * 35);
@@ -214,6 +216,7 @@ public class UserInterface extends PApplet {
                     if (inputScreen1) {
                         inputScreen2 = true;
                         inputScreen1 = false;
+                        t = 'p';
                     }
                 }
             }
@@ -226,7 +229,7 @@ public class UserInterface extends PApplet {
             // section header
             image(secHea, 145, 200, secHea.width * 2 / 5, secHea.height / 2);
             fill(3, 152, 158); // dark color
-            text("Enter  " + numPnoun + "  Proper Nouns", 165, 250);
+            text("Enter  " + numPnoun + "  Proper Nouns", 155, 250);
             fill(130, 191, 194); // light color
             stroke(130, 191, 194);
             rect(147, 265, 248, numPnoun * 35);
@@ -251,7 +254,7 @@ public class UserInterface extends PApplet {
 
             image(secHea, 405, 200, secHea.width * 2 / 5, secHea.height / 2);
             fill(3, 152, 158); // dark color
-            text("Enter  " + numAdV + "  Adverbs", 435, 250);
+            text("Enter  " + numAdV + "  Adverbs (UP)", 415, 250);
             fill(130, 191, 194); // light color
             stroke(130, 191, 194);
             rect(407, 265, 248, numAdV * 35);
