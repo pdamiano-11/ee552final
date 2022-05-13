@@ -33,7 +33,7 @@ public class MadLibsFiles {
     public static void writeToFile(String filename, List<String> contents) throws IOException{
         // use a BufferedWriter to write the string contents to the file
         String folder = new File("").getAbsolutePath();
-        String filepath = folder.concat("/src/main/java/madlibs/" + filename);
+        String filepath = folder.concat("/" + filename);
         try(BufferedWriter out = new BufferedWriter(new FileWriter(filepath))){
             for (String line : contents) {
                 out.write(line + "\n");

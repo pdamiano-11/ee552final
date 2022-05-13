@@ -39,7 +39,7 @@ public class UserInterface extends PApplet {
     char t = 'a';
     Map<String, List<String>> mp = new HashMap<>();
 
-    List<String> lines = MadLibsFiles.getMadLines("/src/main/java/madlibs/main.txt");
+    List<String> lines = MadLibsFiles.getMadLines("/main.txt");
     Madlibsalgo mla = new Madlibsalgo(lines);
     List<String> blankText = mla.createMadLibs();
     Map<String, Integer> tagMap = mla.returnTagMap();
